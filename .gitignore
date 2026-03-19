@@ -1,0 +1,110 @@
+# ================= 系统文件 =================
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+desktop.ini
+
+# ================= 日志文件 =================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ================= 环境变量 =================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ================= IDE 配置 =================
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+# STS / Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+# ================= 构建输出 =================
+# 前端
+dist/
+dist-ssr/
+build/
+# 后端 (Maven)
+target/
+*.jar
+*.war
+*.ear
+# 通用
+**/dist/
+**/build/
+**/target/
+
+# ================= 依赖目录 =================
+node_modules/
+**/node_modules/
+.mvn/wrapper/maven-wrapper.jar
+
+# ================= 缓存文件 =================
+*.cache
+*.tsbuildinfo
+.eslintcache
+.pnpm-store/
+.vercel-cache/
+
+# ================= 测试相关 =================
+coverage/
+__screenshots__/
+/cypress/videos/
+/cypress/screenshots/
+
+# ================= 临时文件 =================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.old
+
+# ================= 数据库文件 =================
+*.db
+*.sqlite
+*.sqlite3
+
+# ================= 其他 =================
+# 压缩文件（如果是构建产物）
+*.zip
+*.tar.gz
+*.rar
+
+# 本地配置文件
+*.local
+*.local.*
+
+# 密钥文件
+*.pem
+*.key
+*.crt
+
+echo "*.p12" >> .gitignore
+echo "keystore.p12" >> .gitignore

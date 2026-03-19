@@ -1,0 +1,217 @@
+@startuml 药品销售管理系统ER图
+!define table(x) class x << (T,#FFAAAA) >>
+hide methods
+skinparam linetype ortho
+
+' ============================================
+' 用户权限模块
+' ============================================
+table(Role) {
+  +id : BIGINT <<PK>>
+  --
+  role_name : VARCHAR(50) <<UK>>
+  description : VARCHAR(255)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(Users) {
+  +id : BIGINT <<PK>>
+  --
+  username : VARCHAR(50) <<UK>>
+  password_hash : VARCHAR(255)
+  role_id : BIGINT <<FK>>
+  status : TINYINT
+  last_login_at : DATETIME(6)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+' ============================================
+' 药品管理模块
+' ============================================
+table(DrugCategory) {
+  +id : BIGINT <<PK>>
+  --
+  name : VARCHAR(100) <<UK>>
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(Drug) {
+  +id : BIGINT <<PK>>
+  --
+  code : VARCHAR(50) <<UK>>
+  name : VARCHAR(200)
+  category_id : BIGINT <<FK>>
+  spec : VARCHAR(200)
+  unit : VARCHAR(50)
+  manufacturer : VARCHAR(200)
+  approval_no : VARCHAR(100)
+  retail_price : DECIMAL(10,2)
+  status : TINYINT
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(DrugBatch) {
+  +id : BIGINT <<PK>>
+  --
+  drug_id : BIGINT <<FK>>
+  batch_no : VARCHAR(100)
+  production_date : DATE
+  expire_date : DATE
+  purchase_price : DECIMAL(10,2)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(StockBatch) {
+  +id : BIGINT <<PK>>
+  --
+  drug_id : BIGINT <<FK>>
+  batch_id : BIGINT <<FK>>
+  qty : INT
+  warning_qty : INT
+  warehouse : VARCHAR(100)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+' ============================================
+' 业务基础数据模块
+' ============================================
+table(Supplier) {
+  +id : BIGINT <<PK>>
+  --
+  name : VARCHAR(200)
+  phone : VARCHAR(30)
+  address : VARCHAR(255)
+  license_no : VARCHAR(100)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(Customer) {
+  +id : BIGINT <<PK>>
+  --
+  name : VARCHAR(200)
+  phone : VARCHAR(30)
+  address : VARCHAR(255)
+  credit_code : VARCHAR(100)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+' ============================================
+' 进货管理模块
+' ============================================
+table(Purchase) {
+  +id : BIGINT <<PK>>
+  --
+  purchase_no : VARCHAR(50) <<UK>>
+  supplier_id : BIGINT <<FK>>
+  purchaser_id : BIGINT <<FK>>
+  total_amount : DECIMAL(10,2)
+  status : TINYINT
+  purchased_at : DATETIME(6)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(PurchaseItem) {
+  +id : BIGINT <<PK>>
+  --
+  purchase_id : BIGINT <<FK>>
+  drug_id : BIGINT <<FK>>
+  batch_id : BIGINT <<FK>>
+  qty : INT
+  unit_price : DECIMAL(10,2)
+  amount : DECIMAL(10,2)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+' ============================================
+' 销售管理模块
+' ============================================
+table(Sale) {
+  +id : BIGINT <<PK>>
+  --
+  sale_no : VARCHAR(50) <<UK>>
+  customer_id : BIGINT <<FK>>
+  seller_id : BIGINT <<FK>>
+  total_amount : DECIMAL(10,2)
+  status : TINYINT
+  sold_at : DATETIME(6)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+table(SaleItem) {
+  +id : BIGINT <<PK>>
+  --
+  sale_id : BIGINT <<FK>>
+  drug_id : BIGINT <<FK>>
+  batch_id : BIGINT <<FK>>
+  qty : INT
+  unit_price : DECIMAL(10,2)
+  amount : DECIMAL(10,2)
+  created_at : DATETIME(6)
+  updated_at : DATETIME(6)
+}
+
+' ============================================
+' 关系定义
+' ============================================
+
+' 用户权限关系
+Role "1" ||--o{ Users : "拥有"
+
+' 药品关系
+DrugCategory "1" ||--o{ Drug : "分类"
+Drug "1" ||--o{ DrugBatch : "包含批次"
+DrugBatch "1" ||--o{ StockBatch : "库存记录"
+Drug "1" ||--o{ StockBatch : "库存"
+
+' 进货关系
+Supplier "1" ||--o{ Purchase : "供应"
+Users "1" ||--o{ Purchase : "经办"
+Purchase "1" ||--o{ PurchaseItem : "包含明细"
+Drug "1" ||--o{ PurchaseItem : "进货药品"
+DrugBatch "1" ||--o{ PurchaseItem : "进货批次"
+
+' 销售关系
+Customer "1" ||--o{ Sale : "购买"
+Users "1" ||--o{ Sale : "销售"
+Sale "1" ||--o{ SaleItem : "包含明细"
+Drug "1" ||--o{ SaleItem : "销售药品"
+DrugBatch "1" ||--o{ SaleItem : "销售批次"
+
+note right of Role
+  角色表：定义系统角色
+  如：管理员、销售员、采购员
+end note
+
+note right of Drug
+  药品表：药品基本信息
+  包含编码、名称、规格、价格等
+end note
+
+note right of StockBatch
+  库存批次表：记录每个批次的库存
+  支持多仓库、低库存预警
+end note
+
+note right of Purchase
+  进货单表：记录采购信息
+  确认后自动更新库存
+end note
+
+note right of Sale
+  销售单表：记录销售信息
+  确认后自动扣减库存
+end note
+
+@enduml
+
