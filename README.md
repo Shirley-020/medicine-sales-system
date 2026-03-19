@@ -13,8 +13,8 @@
 ```
 .
 ├── API_OC.md              # 后端接口文档（以当前代码为准）
-├── back/                  # 后端 Spring Boot 工程
-└── front/                 # 前端 Vue3/Vite 工程
+├── backend/                  # 后端 Spring Boot 工程
+└── frontend/                 # 前端 Vue3/Vite 工程
 ```
 
 ---
@@ -23,7 +23,7 @@
 
 ### 1) 启动数据库（MySQL）
 
-后端默认数据库连接在：`back/src/main/resources/application.properties`。
+后端默认数据库连接在：`backend/src/main/resources/application.properties`。
 
 当前默认示例：
 - `jdbc:mysql://localhost:13306/medicine_sales`
@@ -37,7 +37,7 @@
 #### （可选）导入演示数据（整库快照）
 
 项目提供了一个整库演示脚本：
-- `back/database/demo_full.sql`
+- `backend/database/demo_full.sql`
 
 该脚本包含**建表 + 演示数据**，适合课程演示/验收。
 
@@ -61,10 +61,10 @@ mysql -h 127.0.0.1 -P 13306 -u root -proot123456 medicine_sales < back/database/
 
 ### 2) 启动后端（Spring Boot）
 
-进入 `back` 目录：
+进入 `backend` 目录：
 
 ```bash
-cd back
+cd backend
 mvn -DskipTests package
 mvn spring-boot:run
 ```
@@ -73,10 +73,10 @@ mvn spring-boot:run
 
 ### 3) 启动前端（Vue 3 + Vite）
 
-进入 `front` 目录：
+进入 `frontend` 目录：
 
 ```bash
-cd front
+cd frontend
 npm install
 npm run dev
 ```
@@ -87,13 +87,13 @@ npm run dev
 
 ## 前后端联调说明
 
-前端 Axios 基础地址配置在：`front/src/utils/request.js`
+前端 Axios 基础地址配置在：`frontend/src/utils/request.js`
 
 ```js
 baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 ```
 
-如需修改后端地址，可在前端创建环境变量文件（例如 `front/.env.development`）：
+如需修改后端地址，可在前端创建环境变量文件（例如 `frontend/.env.development`）：
 
 ```ini
 VITE_API_BASE_URL=http://localhost:8080
@@ -112,7 +112,7 @@ Authorization: Bearer <TOKEN>
 ```
 
 JWT 密钥可通过环境变量设置（推荐）：
-- 后端说明：`back/JWT_ENV_README.md`
+- 后端说明：`backend/JWT_ENV_README.md`
 
 ---
 
@@ -137,8 +137,8 @@ curl -H "Authorization: Bearer <TOKEN>" \
 
 ## 子项目说明
 
-- 后端 README：[`back/README.md`](./back/README.md)
-- 前端 README：[`front/README.md`](./front/README.md)
+- 后端 README：[`backend/README.md`](./back/README.md)
+- 前端 README：[`frontend/README.md`](./front/README.md)
 
 
 
